@@ -12,6 +12,6 @@ public class SudokuService {
     // function to generate a new game
     public int[][] generateSudoku() {
         // generate and return the game
-        return  generator.generateSudoku(SudokuDifficulty.EASY);
+        return generator.generateSudoku(SudokuDifficulty.MEDIUM);
     }
 }

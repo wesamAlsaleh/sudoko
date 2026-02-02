@@ -100,14 +100,8 @@ public class Generator {
 
     // function to remove digits based on the difficulty level
     private void removeDigits(int[][] board, SudokuDifficulty difficulty) {
-        // difficulty system
-        Map<SudokuDifficulty, Integer> difficultySystem = new HashMap<>();
-        difficultySystem.put(SudokuDifficulty.EASY, 35);
-        difficultySystem.put(SudokuDifficulty.MEDIUM, 45);
-        difficultySystem.put(SudokuDifficulty.HARD, 54);
-
-        // get the digits to remove count based on the difficulty input
-        var digitsToRemove = difficultySystem.get(difficulty);
+        // get the digits to remove count based on the difficulty
+        var digitsToRemove = difficulty.getDigitsToRemove();
 
         System.out.println("Removing " + digitsToRemove);
 
@@ -124,10 +118,10 @@ public class Generator {
             if (board[row][col] != 0) {
                 // make it zero (removed)
                 board[row][col] = 0;
-            }
 
-            // reduce the numbers to remove counter
-            digitsToRemove--;
+                // reduce the numbers to remove counter
+                digitsToRemove--;
+            }
         }
     }
 
