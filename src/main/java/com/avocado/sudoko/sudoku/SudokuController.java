@@ -1,4 +1,4 @@
-package com.avocado.sudoko.sudoko;
+package com.avocado.sudoko.sudoku;
 
 public class SudokuController {
 }
