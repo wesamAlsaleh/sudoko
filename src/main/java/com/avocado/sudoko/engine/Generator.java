@@ -59,16 +59,16 @@ public class Generator {
         // if it's the last element in the row go to next row
         if (col == 9) {
             // fill the next row
-            fillNonDiagonalGrids(board, row + 1, 0); // go to the next row (row + 1) with the first column (0)
+            return fillNonDiagonalGrids(board, row + 1, 0); // go to the next row (row + 1) with the first column (0)
         }
 
         // if its cell (column) is already filled go to the next cell
         if (board[row][col] != 0) {
-            fillNonDiagonalGrids(board, row, col + 1); // go to next column (column + 1) in the same row
+            return fillNonDiagonalGrids(board, row, col + 1); // go to next column (column + 1) in the same row
         }
 
-        // try the numbers 1 to 9 (0 -> 8) in current cell
-        for (int number = 0; number < 9; number++) {
+        // try the numbers 1 to 9 (1 -> 9) in current cell
+        for (int number = 1; number <= 9; number++) {
             // if the number is validated insert it
             if (solver.isValidPlacement(board, row, col, number)) {
                 // insert it
