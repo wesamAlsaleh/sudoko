@@ -51,7 +51,7 @@ public class Generator {
 
     // function to fill the non-diagonal grids (board[0][3], board[0][6], board[3][0], board[3][6], board[6][0], board[6][3])
     private boolean fillNonDiagonalGrids(int[][] board, int row, int col) {
-        // if it's the last row return true
+        // if it's the end of the grid
         if (row == 9) {
             return true;
         }
@@ -59,18 +59,18 @@ public class Generator {
         // if it's the last element in the row go to next row
         if (col == 9) {
             // fill the next row
-            fillGrid(board, row + 1, 0); // go to the next row (row + 1) with the first column (0)
+            fillNonDiagonalGrids(board, row + 1, 0); // go to the next row (row + 1) with the first column (0)
         }
 
         // if its cell (column) is already filled go to the next cell
         if (board[row][col] != 0) {
-            fillGrid(board, row, col + 1); // go to next column (column + 1) in the same row
+            fillNonDiagonalGrids(board, row, col + 1); // go to next column (column + 1) in the same row
         }
 
         // try the numbers 1 to 9 (0 -> 8) in current cell
         for (int number = 0; number < 9; number++) {
             // if the number is validated insert it
-            if (solver.validNumberInBox(board, row, col, number)) {
+            if (solver.isValidPlacement(board, row, col, number)) {
                 // insert it
                 board[row][col] = number;
 
@@ -78,10 +78,10 @@ public class Generator {
                 if (fillNonDiagonalGrids(board, row, col + 1)) {
                     return true; // return true
                 }
-            }
 
-            // if not valid make it zero
-            board[row][col] = 0; // backtrack
+                // if not valid make it zero
+                board[row][col] = 0; // backtrack
+            }
         }
 
         // default
@@ -89,7 +89,7 @@ public class Generator {
     }
 
     // function to generate 2D array of 9x9
-    public int[][] sudokuGenerator(SudokuDifficulty difficulty) {
+    public int[][] generateSudoku(SudokuDifficulty difficulty) {
         // create the board array
         int[][] board = new int[ROW_SIZE][COLUMN_SIZE];
 
