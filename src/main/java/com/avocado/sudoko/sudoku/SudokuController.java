@@ -15,8 +15,8 @@ public class SudokuController {
     // api endpoint to generate a board
     @PostMapping
     public ResponseEntity<?> generateSudoku() {
-        var game = sudokuService.generateSudoku();
+        var sudoku = sudokuService.generateSudoku();
 
-        return ResponseEntity.ok(game);
+        return ResponseEntity.ok(sudoku);
     }
 }

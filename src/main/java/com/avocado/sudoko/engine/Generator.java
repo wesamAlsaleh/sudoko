@@ -1,13 +1,11 @@
 package com.avocado.sudoko.engine;
 
+import com.avocado.sudoko.sudoku.Sudoku;
 import com.avocado.sudoko.sudoku.SudokuDifficulty;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.UUID;
 
 /**
  * Implements the Sudoku game (board) generator.
@@ -125,8 +123,27 @@ public class Generator {
         }
     }
 
-    // function to generate 2D array of 9x9
-    public int[][] generateSudoku(SudokuDifficulty difficulty) {
+    // function to convert a 2D array of 9x9 to String of numbers
+    private String arrayToString(int[][] board) {
+        // string builder instance
+        StringBuilder stringBuilder = new StringBuilder();
+
+        // iterate over the board to convert the array to string
+        for (int i = 0; i < ROW_SIZE; i++) {
+            for (int j = 0; j < COLUMN_SIZE; j++) {
+                stringBuilder.append(board[i][j]);
+            }
+        }
+
+        // return the array as string
+        return stringBuilder.toString();
+    }
+
+    // function to generate a sudoku game
+    public Sudoku generateSudokuGame(SudokuDifficulty difficulty) {
+        // create sudoku instance
+        var sudoku = new Sudoku();
+
         // create the board array
         int[][] board = new int[ROW_SIZE][COLUMN_SIZE];
 
@@ -136,10 +153,25 @@ public class Generator {
         // fill the remaining grids (start from board[0][0])
         fillNonDiagonalGrids(board, 0, 0);
 
+        // convert the puzzle solution to string
+        var puzzleSolution = arrayToString(board);
+
         // remove digits randomly based on the difficulty
         removeDigits(board, difficulty);
 
+        // convert the puzzle to string
+        var puzzle = arrayToString(board);
+
+        // fill the sudoku fields
+        sudoku.setUuid(UUID.randomUUID()); // generate a unique uuid
+        sudoku.setPuzzle(puzzle);
+        sudoku.setPuzzleSolution(puzzleSolution);
+        sudoku.setDifficulty(difficulty);
+
+        // todo: store the puzzle solution in a file
+        // todo: store the puzzle in a file
+
         // return the generated board
-        return board;
+        return sudoku;
     }
 }
