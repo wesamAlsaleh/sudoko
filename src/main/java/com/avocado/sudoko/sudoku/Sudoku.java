@@ -23,4 +23,6 @@ public class Sudoku {
 
     @JsonIgnore
     private String puzzleSolution;
+
+    // todo: function to print the board
 }

@@ -16,7 +16,7 @@ public class SudokuService {
         // generate new sudoku game
         var sudoku = generator.generateSudokuGame(SudokuDifficulty.MEDIUM);
 
-        // return the sudoko
+        // return the sudoko as dto
         return sudokuMapper.toDto(sudoku);
     }
 }

@@ -2,9 +2,11 @@ package com.avocado.sudoko.engine;
 
 import com.avocado.sudoko.sudoku.Sudoku;
 import com.avocado.sudoko.sudoku.SudokuDifficulty;
+import com.avocado.sudoko.sudoku.SudokuMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -26,7 +28,11 @@ public class Generator {
 
     // function to get random cell id from 0 to
     private int getRandomCellIndex() {
-        return (int) (Math.random() * 82); // 0 to 81
+        // create random instance
+        var random = new Random();
+
+        // return the random
+        return random.nextInt(ROW_SIZE * COLUMN_SIZE); // 0..80
     }
 
     // function to fill a 3x3 grid
@@ -97,7 +103,7 @@ public class Generator {
     }
 
     // function to remove digits based on the difficulty level
-    private void removeDigits(int[][] board, SudokuDifficulty difficulty) {
+    private int[][] removeDigits(int[][] board, SudokuDifficulty difficulty) {
         // get the digits to remove count based on the difficulty
         var digitsToRemove = difficulty.getDigitsToRemove();
 
@@ -121,6 +127,9 @@ public class Generator {
                 digitsToRemove--;
             }
         }
+
+        // return the updated board
+        return board;
     }
 
     // function to convert a 2D array of 9x9 to String of numbers
@@ -139,11 +148,8 @@ public class Generator {
         return stringBuilder.toString();
     }
 
-    // function to generate a sudoku game
-    public Sudoku generateSudokuGame(SudokuDifficulty difficulty) {
-        // create sudoku instance
-        var sudoku = new Sudoku();
-
+    // function to generate a solved puzzle
+    private int[][] generateSolvedPuzzle() {
         // create the board array
         int[][] board = new int[ROW_SIZE][COLUMN_SIZE];
 
@@ -153,25 +159,47 @@ public class Generator {
         // fill the remaining grids (start from board[0][0])
         fillNonDiagonalGrids(board, 0, 0);
 
-        // convert the puzzle solution to string
-        var puzzleSolution = arrayToString(board);
+        // return the solved sudoku
+        return board;
+    }
 
-        // remove digits randomly based on the difficulty
-        removeDigits(board, difficulty);
+    // function to create puzzle from the solution
+    private int[][] createPuzzle(int[][] solvedBoard, SudokuDifficulty difficulty) {
+        // remove digits randomly based on the difficulty and return the board
+        return removeDigits(solvedBoard, difficulty);
+    }
 
-        // convert the puzzle to string
-        var puzzle = arrayToString(board);
+    // function to build a sudoku game
+    private Sudoku buildSudoku(int[][] solvedBoard, int[][] puzzleBoard, SudokuDifficulty difficulty) {
+        // create sudoku instance
+        var sudoku = new Sudoku();
 
         // fill the sudoku fields
         sudoku.setUuid(UUID.randomUUID()); // generate a unique uuid
-        sudoku.setPuzzle(puzzle);
-        sudoku.setPuzzleSolution(puzzleSolution);
-        sudoku.setDifficulty(difficulty);
+        sudoku.setPuzzle(arrayToString(puzzleBoard)); // convert the puzzle to string
+        sudoku.setPuzzleSolution(arrayToString(solvedBoard)); // convert the puzzle solution to string
+        sudoku.setDifficulty(difficulty); // set the difficulty
 
         // todo: store the puzzle solution in a file
         // todo: store the puzzle in a file
 
         // return the generated board
         return sudoku;
+    }
+
+    // function to generate a sudoku game
+    public Sudoku generateSudokuGame(SudokuDifficulty difficulty) {
+        // generate a solved board
+        var solvedBoard = generateSolvedPuzzle();
+
+        // create the puzzle based on the difficulty
+        var puzzleBoard = createPuzzle(solvedBoard, difficulty);
+
+        // build and return the game as object
+        return buildSudoku(
+                solvedBoard,
+                puzzleBoard,
+                difficulty
+        );
     }
 }
