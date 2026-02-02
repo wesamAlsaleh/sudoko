@@ -64,7 +64,7 @@ public class Solver {
         return false;
     }
 
-    // function to check if the number is a valid number
+    // function to check if the number is a valid number to insert it in the 9x9 board
     public boolean isValidPlacement(int[][] board, int row, int col, int number) {
         // return true if the number is not in the row, column, grid
         return !isNumberInRow(board, row, number) &&

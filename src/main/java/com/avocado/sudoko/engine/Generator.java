@@ -4,6 +4,11 @@ import com.avocado.sudoko.sudoku.SudokuDifficulty;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Implements the Sudoku game (board) generator.
  */
@@ -18,7 +23,12 @@ public class Generator {
 
     // function to get random number from 1 to 9
     private int generateRandomNumber() {
-        return (int) (Math.random() * 11); // 0 to 100
+        return (int) (Math.random() * 10); // 0 to 9
+    }
+
+    // function to get random cell id from 0 to
+    private int getRandomCellIndex() {
+        return (int) (Math.random() * 82); // 0 to 81
     }
 
     // function to fill a 3x3 grid
@@ -88,6 +98,39 @@ public class Generator {
         return false;
     }
 
+    // function to remove digits based on the difficulty level
+    private void removeDigits(int[][] board, SudokuDifficulty difficulty) {
+        // difficulty system
+        Map<SudokuDifficulty, Integer> difficultySystem = new HashMap<>();
+        difficultySystem.put(SudokuDifficulty.EASY, 35);
+        difficultySystem.put(SudokuDifficulty.MEDIUM, 45);
+        difficultySystem.put(SudokuDifficulty.HARD, 54);
+
+        // get the digits to remove count based on the difficulty input
+        var digitsToRemove = difficultySystem.get(difficulty);
+
+        System.out.println("Removing " + digitsToRemove);
+
+        // while there are numbers to remove
+        while (digitsToRemove > 0) {
+            // get random cell id (0 -> 81)
+            var cellId = getRandomCellIndex();
+
+            // get the cell coordinates
+            var row = cellId / ROW_SIZE;
+            var col = cellId % COLUMN_SIZE;
+
+            // if the number is not removed (zero) remove it
+            if (board[row][col] != 0) {
+                // make it zero (removed)
+                board[row][col] = 0;
+            }
+
+            // reduce the numbers to remove counter
+            digitsToRemove--;
+        }
+    }
+
     // function to generate 2D array of 9x9
     public int[][] generateSudoku(SudokuDifficulty difficulty) {
         // create the board array
@@ -99,7 +142,8 @@ public class Generator {
         // fill the remaining grids (start from board[0][0])
         fillNonDiagonalGrids(board, 0, 0);
 
-        // todo: remove digits randomly based on the difficulty
+        // remove digits randomly based on the difficulty
+        removeDigits(board, difficulty);
 
         // return the generated board
         return board;
