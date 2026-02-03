@@ -28,6 +28,7 @@ public class SudokuService {
 
     // function to load a game using UUID
     public SudokuDto loadSudoko(UUID uuid) {
+        // get the sudoku details from the db
         var sudoku = sudokuRepository.getSudokuByUUID(uuid);
 
         // return the sudoko as dto

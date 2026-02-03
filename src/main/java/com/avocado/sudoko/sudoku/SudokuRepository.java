@@ -70,5 +70,4 @@ public class SudokuRepository {
         // create sudoku instance from the string
         return objectMapper.readValue(content, Sudoku.class);
     }
-
 }
