@@ -4,9 +4,9 @@ import com.avocado.sudoko.global.exceptions.FileWriteException;
 import com.avocado.sudoko.global.exceptions.SudokuFileNotCreatedException;
 import com.avocado.sudoko.global.io.DBPaths;
 import com.avocado.sudoko.global.io.FileReadWriter;
-import com.avocado.sudoko.sudoku.dtos.SudokuDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.File;
 
@@ -15,14 +15,15 @@ import java.io.File;
 public class SudokuRepository {
     private final DBPaths dbPaths;
     private final FileReadWriter fileReadWriter;
+    private final ObjectMapper objectMapper;
 
-    // function to save the solution puzzle in a file
+    // function to save the puzzle in a file
     public void save(Sudoku sudoku) {
         // prepare the file name using the UUID
         var fileName = sudoku.getUuid() + ".txt";
 
         // prepare the file object
-        File file = new File(dbPaths.getPuzzlesPath() + "sds", fileName);
+        File file = new File(dbPaths.getPuzzlesPath(), fileName);
 
         // create a file using the prepared name
         if (!fileReadWriter.createFile(file, "Failed to create a puzzle file")) {
@@ -39,12 +40,16 @@ public class SudokuRepository {
         // write in the created file and return the status of the operation
         if (!fileReadWriter.write(
                 file,
-                sudoku.getPuzzle(),
+                objectMapper
+                        .writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(sudoku), // serialize the sudoku object
                 false
         )) {
             // if failed to write throw an exception
             throw new FileWriteException(String.format("Failed to write puzzle file with the name of: %s", fileName));
         }
     }
+
+    // function to load sudoku from a file
 
 }
