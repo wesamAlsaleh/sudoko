@@ -5,6 +5,8 @@ import com.avocado.sudoko.sudoku.dtos.SudokuDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @AllArgsConstructor
 public class SudokuService {
@@ -19,6 +21,14 @@ public class SudokuService {
 
         // save the generated game
         sudokuRepository.save(sudoku);
+
+        // return the sudoko as dto
+        return sudokuMapper.toDto(sudoku);
+    }
+
+    // function to load a game using UUID
+    public SudokuDto loadSudoko(UUID uuid) {
+        var sudoku = sudokuRepository.getSudokuByUUID(uuid);
 
         // return the sudoko as dto
         return sudokuMapper.toDto(sudoku);

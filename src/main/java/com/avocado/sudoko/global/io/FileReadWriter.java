@@ -84,8 +84,17 @@ public class FileReadWriter {
     public String read(File file, String fallbackMessage) {
         // try-with-resources: Scanner will be closed automatically
         try (Scanner reader = new Scanner(file)) {
-            // read the data
-            return reader.nextLine();
+            // create string builder instance
+            var sb = new StringBuilder();
+
+            // while there is data
+            while (reader.hasNextLine()) {
+                // append the line in the string builder
+                sb.append(reader.nextLine());
+            }
+
+            // return the data as string
+            return sb.toString();
         } catch (FileNotFoundException e) {
             // log the error to debug permissions or disk space
             System.err.println("Critical FileNotFoundException Error: " + e.getMessage());

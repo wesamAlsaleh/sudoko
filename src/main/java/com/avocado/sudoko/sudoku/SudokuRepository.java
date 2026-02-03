@@ -2,6 +2,7 @@ package com.avocado.sudoko.sudoku;
 
 import com.avocado.sudoko.global.exceptions.FileWriteException;
 import com.avocado.sudoko.global.exceptions.SudokuFileNotCreatedException;
+import com.avocado.sudoko.global.exceptions.SudokuFileNotFoundException;
 import com.avocado.sudoko.global.io.DBPaths;
 import com.avocado.sudoko.global.io.FileReadWriter;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ public class SudokuRepository {
     private final DBPaths dbPaths;
     private final FileReadWriter fileReadWriter;
     private final ObjectMapper objectMapper;
+
 
     // function to save the puzzle in a file
     public void save(Sudoku sudoku) {
@@ -52,7 +54,21 @@ public class SudokuRepository {
     }
 
     // function to load sudoku from a file (db)
-    public void getSudokuByUUID(UUID uuid) {
+    public Sudoku getSudokuByUUID(UUID uuid) {
+        // prepare the file path
+        var fileName = uuid + ".txt";
+        File file = new File(dbPaths.getPuzzlesPath(), fileName);
+
+        // if not exist throw error
+        if (!file.exists()) {
+            throw new SudokuFileNotFoundException("Puzzle file with id " + uuid + " does not exist");
+        }
+
+        // read the content
+        var content = fileReadWriter.read(file, "Failed to read puzzle file with id " + uuid);
+
+        // create sudoku instance from the string
+        return objectMapper.readValue(content, Sudoku.class);
     }
 
 }
