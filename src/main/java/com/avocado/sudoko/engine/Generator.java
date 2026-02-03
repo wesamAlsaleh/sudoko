@@ -26,7 +26,7 @@ public class Generator {
         return (int) (Math.random() * 10); // 0 to 9
     }
 
-    // function to get random cell id from 0 to
+    // function to get random cell id from 0 to 80
     private int getRandomCellIndex() {
         // create random instance
         var random = new Random();
@@ -102,6 +102,27 @@ public class Generator {
         return false;
     }
 
+    // function to clone 2d Array
+    private int[][] deepCopyBoard(int[][] board) {
+        // create the board array
+        int[][] copyBoard = new int[ROW_SIZE][COLUMN_SIZE];
+
+        // iterate over the rows (0 -> 8)
+        for (int i = 0; i < ROW_SIZE; i++) {
+            // copy the cells in each row
+            System.arraycopy(
+                    board[i], // array to be copied from
+                    0, // starting position in source array from where to copy (first index)
+                    copyBoard[i], // array to be copied in
+                    0, // starting position in destination array, where to paste in (first index as well)
+                    COLUMN_SIZE // total no. of components to be copied (9 cells in each row)
+            );
+        }
+
+        // return the copied array
+        return copyBoard;
+    }
+
     // function to remove digits based on the difficulty level
     private int[][] removeDigits(int[][] board, SudokuDifficulty difficulty) {
         // create a clone of the board
@@ -149,27 +170,6 @@ public class Generator {
 
         // return the array as string
         return stringBuilder.toString();
-    }
-
-    // function to clone 2d Array
-    private int[][] deepCopyBoard(int[][] board) {
-        // create the board array
-        int[][] copyBoard = new int[ROW_SIZE][COLUMN_SIZE];
-
-        // iterate over the rows (0 -> 8)
-        for (int i = 0; i < ROW_SIZE; i++) {
-            // copy the cells in each row
-            System.arraycopy(
-                    board[i], // array to be copied from
-                    0, // starting position in source array from where to copy (first index)
-                    copyBoard[i], // array to be copied in
-                    0, // starting position in destination array, where to paste in (first index as well)
-                    COLUMN_SIZE // total no. of components to be copied (9 cells in each row)
-            );
-        }
-
-        // return the copied array
-        return copyBoard;
     }
 
     // function to generate a solved puzzle

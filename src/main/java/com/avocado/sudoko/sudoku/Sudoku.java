@@ -24,6 +24,16 @@ public class Sudoku {
 
     private String puzzleSolution;
 
+    // function to print the sudoku board
+    public void printSudoku() {
+        printSudoku(this.puzzle);
+    }
+
+    // function to print the sudoku solution
+    public void printSudokuSolution() {
+        printSudoku(this.puzzleSolution);
+    }
+
     // function to print the board
     private void printSudoku(String puzzleString) {
         // create 2d 9x9 array
@@ -68,15 +78,5 @@ public class Sudoku {
                 System.out.println("+-------+-------+-------+");
             }
         }
-    }
-
-    // function to print the sudoku board
-    public void printSudoku() {
-        printSudoku(this.puzzle);
-    }
-
-    // function to print the sudoku solution
-    public void printSudokuSolution() {
-        printSudoku(this.puzzleSolution);
     }
 }

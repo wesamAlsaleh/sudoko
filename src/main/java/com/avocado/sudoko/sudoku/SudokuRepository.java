@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.File;
+import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -50,6 +51,8 @@ public class SudokuRepository {
         }
     }
 
-    // function to load sudoku from a file
+    // function to load sudoku from a file (db)
+    public void getSudokuByUUID(UUID uuid) {
+    }
 
 }

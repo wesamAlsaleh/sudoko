@@ -1,7 +1,7 @@
 package com.avocado.sudoko.global.io;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 // File myObj = new File("filename.txt"); // Specify the filename (path!)
 
-@Component
+@Service
 @AllArgsConstructor
 public class FileReadWriter {
     /**
@@ -81,21 +81,18 @@ public class FileReadWriter {
      * @param fallbackMessage A custom message to log if the file is missing.
      * @return The content of the file as a String, or null if an error occurs.
      */
-    public void readFile(File file, String fallbackMessage) {
+    public String read(File file, String fallbackMessage) {
         // try-with-resources: Scanner will be closed automatically
         try (Scanner reader = new Scanner(file)) {
             // read the data
-            while (reader.hasNextLine()) {
-                // read the line
-                String data = reader.nextLine();
-
-                // todo: return the data
-                System.out.println(data);
-            }
+            return reader.nextLine();
         } catch (FileNotFoundException e) {
             // log the error to debug permissions or disk space
             System.err.println("Critical FileNotFoundException Error: " + e.getMessage());
         }
+
+        // return the fallback message
+        return fallbackMessage;
     }
 
     /**
@@ -128,5 +125,45 @@ public class FileReadWriter {
             return false;
         }
 
+    }
+
+    /**
+     * Retrieves an array of File objects representing all files
+     * within the specified source path.
+     *
+     * @param sourcePath The path of the directory to list.
+     * @return An array of File objects. Returns an empty array if the directory
+     * is empty, does not exist, or is not a directory.
+     */
+    public File[] listDirectoryFiles(String sourcePath) {
+        // get the directory
+        File directory = new File(sourcePath);
+
+        // check if it exists and is a directory to avoid NullPointerException from listFiles()
+        if (!directory.exists() || !directory.isDirectory()) {
+            // return empty array
+            return new File[0];
+        }
+
+        // get the files of the directory
+        File[] files = directory.listFiles();
+
+        // return the files if available, otherwise return empty array
+        return (files != null) ? files : new File[0];
+    }
+
+    /**
+     * Checks if a specific file exists within a given directory.
+     *
+     * @param sourcePath The directory path to search in.
+     * @param fileName   The name of the file (including extension) to look for.
+     * @return true if the file exists and is a valid file; false otherwise.
+     */
+    public boolean isFileInDirectory(String sourcePath, String fileName) {
+        // create a file pointer to check for the specific Sudoku record
+        File targetFile = new File(sourcePath, fileName); // combine the directory path and file name into a single file reference
+
+        // return true if it exists and it's a valid file
+        return (targetFile.exists() && targetFile.isFile());
     }
 }
