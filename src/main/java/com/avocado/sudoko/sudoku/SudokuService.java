@@ -10,14 +10,15 @@ import org.springframework.stereotype.Service;
 public class SudokuService {
     private final Generator generator;
     private final SudokuMapper sudokuMapper;
+    private final SudokuRepository sudokuRepository;
 
     // function to generate a new game
     public SudokuDto generateSudoku() {
         // generate new sudoku game
         var sudoku = generator.generateSudokuGame(SudokuDifficulty.MEDIUM);
 
-        sudoku.printSudoku();
-        sudoku.printSudokuSolution();
+        // save the generated game
+        sudokuRepository.save(sudoku);
 
         // return the sudoko as dto
         return sudokuMapper.toDto(sudoku);

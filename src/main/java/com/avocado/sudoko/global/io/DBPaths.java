@@ -1,13 +1,17 @@
 package com.avocado.sudoko.global.io;
 
+import org.springframework.stereotype.Component;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 
 /**
  * Utility class for managing and resolving file system paths within the application.
  * This class centralizes the directory structure for Sudoku puzzles and solutions
  * to ensure consistency across different Operating Systems.
  */
+@Component
 public class DBPaths {
     /**
      * The root directory for all application data.
@@ -46,7 +50,7 @@ public class DBPaths {
      *
      * @return The path string for the "puzzles_solution" directory.
      */
-    public String getPuzzlesSolutionPath() {
-        return getDirectoryPath("puzzles_solution");
-    }
+//    public String getPuzzlesSolutionPath() {
+//        return getDirectoryPath("puzzles_solution");
+//    }
 }
