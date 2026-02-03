@@ -17,7 +17,6 @@ public class SudokuService {
         var sudoku = generator.generateSudokuGame(SudokuDifficulty.MEDIUM);
 
         sudoku.printSudoku();
-        System.out.println("Sudoku solution: " + sudoku.getPuzzleSolution());
         sudoku.printSudokuSolution();
 
         // return the sudoko as dto

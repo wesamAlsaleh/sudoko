@@ -25,8 +25,8 @@ public class Sudoku {
     @JsonIgnore
     private String puzzleSolution;
 
-    // todo: function to print the board
-    private void printSudoku(String puzzle) {
+    // function to print the board
+    private void printSudoku(String puzzleString) {
         // create 2d 9x9 array
         var board = new int[9][9];
 
@@ -37,7 +37,7 @@ public class Sudoku {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 // get the value
-                board[i][j] = Character.getNumericValue(puzzle.charAt(stringIndex));
+                board[i][j] = Character.getNumericValue(puzzleString.charAt(stringIndex));
 
                 // update the pointer
                 stringIndex++;
@@ -71,13 +71,13 @@ public class Sudoku {
         }
     }
 
-    // function to print the sudoku solution
-    public void printSudokuSolution() {
-        printSudoku(this.puzzleSolution);
-    }
-
     // function to print the sudoku board
     public void printSudoku() {
         printSudoku(this.puzzle);
+    }
+
+    // function to print the sudoku solution
+    public void printSudokuSolution() {
+        printSudoku(this.puzzleSolution);
     }
 }
