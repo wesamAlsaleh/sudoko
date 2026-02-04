@@ -35,7 +35,6 @@ public class SudokuService {
 
     // function to load a game using UUID
     public Sudoku loadSudoko(UUID uuid) {
-        // todo: handle not found exception
         // get and return the sudoku details from the db
         return sudokuRepository.getSudokuByUUID(uuid);
     }
@@ -43,11 +42,12 @@ public class SudokuService {
     // function to submit a puzzle solution
     public boolean submitSudoku(SudokuSolveRequest request) {
         // get the sudoku solution
-        var sudokuSolution =
-                loadSudoko(UUID.fromString(request.getUuid()))
-                .getPuzzleSolution();
+        var sudokuSolution = loadSudoko(UUID.fromString(request.getUuid())).getPuzzleSolution();
+
+        // get the player solution
+        var playerSolution = request.getPlayerSolution().trim(); // trim to be safe
 
         // compare the player solution with the original solution
-        return request.getPlayerSolution().equals(sudokuSolution);
+        return playerSolution.equals(sudokuSolution.trim());
     }
 }

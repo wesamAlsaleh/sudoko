@@ -34,7 +34,6 @@ public class SudokuController {
                 .body(sudokuMapper.toDto(sudoku));
     }
 
-    // todo: handle not found exception
     // api endpoint to load a game
     @GetMapping("/{id}")
     public ResponseEntity<?> getSudoku(@PathVariable(name = "id") String uuid) {
@@ -45,7 +44,6 @@ public class SudokuController {
         return ResponseEntity.ok(sudokuMapper.toDto(sudoku));
     }
 
-    // todo: handle not found exception
     // api endpoint to submit a solution
     @PostMapping("/submit")
     public ResponseEntity<?> submitSolution(@Valid @RequestBody SudokuSolveRequest request) {
