@@ -34,12 +34,40 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    // method to handle file not found exception
+    // method to handle write operations
+    @ExceptionHandler(FileWriteException.class)
+    public ResponseEntity<ErrorDto> handleFileWriteException(FileWriteException exception) {
+        // return 500 internal server error with a message
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorDto(exception.getMessage()));
+    }
+
+    // method to handle Sudoku file not created exception
+    @ExceptionHandler(SudokuFileNotCreatedException.class)
+    public ResponseEntity<ErrorDto> handleFileNotCreatedException(SudokuFileNotCreatedException exception) {
+        // return 500 internal server error with a message
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorDto(exception.getMessage()));
+    }
+
+    // method to handle Sudoku file not found exception
     @ExceptionHandler(SudokuFileNotFoundException.class)
-    public ResponseEntity<ErrorDto> handleSudokuFileNotFound(SudokuFileNotFoundException exception) {
+    public ResponseEntity<ErrorDto> handleSudokuFileNotFoundException(SudokuFileNotFoundException exception) {
         // return 404 not found with a message
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorDto(exception.getMessage()));
     }
+
+    // method to handle character violation exception
+    @ExceptionHandler(InvalidCharacterException.class)
+    public ResponseEntity<ErrorDto> handleInvalidCharacterException(InvalidCharacterException exception) {
+        // return 400 bad request with a message
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorDto(exception.getMessage()));
+    }
+
 }
