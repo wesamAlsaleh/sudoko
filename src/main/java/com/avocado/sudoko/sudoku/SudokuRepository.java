@@ -21,7 +21,7 @@ public class SudokuRepository {
 
 
     // function to save the puzzle in a file
-    public void save(Sudoku sudoku) {
+    public Sudoku save(Sudoku sudoku) {
         // prepare the file name using the UUID
         var fileName = sudoku.getUuid() + ".txt";
 
@@ -51,6 +51,9 @@ public class SudokuRepository {
             // if failed to write throw an exception
             throw new FileWriteException(String.format("Failed to write puzzle file with the name of: %s", fileName));
         }
+
+        // return the created sudoku
+        return sudoku;
     }
 
     // function to load sudoku from a file (db)

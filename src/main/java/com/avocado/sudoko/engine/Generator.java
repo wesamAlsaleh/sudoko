@@ -5,7 +5,6 @@ import com.avocado.sudoko.sudoku.SudokuDifficulty;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 

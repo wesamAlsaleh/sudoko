@@ -39,7 +39,7 @@ public class Sudoku {
         // create 2d 9x9 array
         var board = new int[9][9];
 
-        // index flag
+        // string index flag
         var stringIndex = 0;
 
         // convert the string to 2D array
