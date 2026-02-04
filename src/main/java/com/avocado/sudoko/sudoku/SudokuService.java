@@ -2,6 +2,7 @@ package com.avocado.sudoko.sudoku;
 
 import com.avocado.sudoko.engine.Generator;
 import com.avocado.sudoko.sudoku.dtos.SudokuDto;
+import com.avocado.sudoko.sudoku.dtos.SudokuSolveRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,27 +12,42 @@ import java.util.UUID;
 @AllArgsConstructor
 public class SudokuService {
     private final Generator generator;
-    private final SudokuMapper sudokuMapper;
+
     private final SudokuRepository sudokuRepository;
 
     // function to generate a new game
-    public SudokuDto generateSudoku() {
+    public Sudoku generateSudoku() {
         // generate new sudoku game
         var sudoku = generator.generateSudokuGame(SudokuDifficulty.MEDIUM);
 
         // save the generated game
         sudokuRepository.save(sudoku);
 
-        // return the sudoko as dto
-        return sudokuMapper.toDto(sudoku);
+        // for testing purposes
+        sudoku.printSudoku();
+        System.out.println(" ");
+        sudoku.printSudokuSolution();
+        System.out.println(sudoku.getPuzzleSolution());
+
+        // return the sudoko
+        return sudoku;
     }
 
     // function to load a game using UUID
-    public SudokuDto loadSudoko(UUID uuid) {
-        // get the sudoku details from the db
-        var sudoku = sudokuRepository.getSudokuByUUID(uuid);
+    public Sudoku loadSudoko(UUID uuid) {
+        // todo: handle not found exception
+        // get and return the sudoku details from the db
+        return sudokuRepository.getSudokuByUUID(uuid);
+    }
 
-        // return the sudoko as dto
-        return sudokuMapper.toDto(sudoku);
+    // function to submit a puzzle solution
+    public boolean submitSudoku(SudokuSolveRequest request) {
+        // get the sudoku solution
+        var sudokuSolution =
+                loadSudoko(UUID.fromString(request.getUuid()))
+                .getPuzzleSolution();
+
+        // compare the player solution with the original solution
+        return request.getPlayerSolution().equals(sudokuSolution);
     }
 }
