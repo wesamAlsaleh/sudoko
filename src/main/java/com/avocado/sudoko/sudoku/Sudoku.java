@@ -34,8 +34,8 @@ public class Sudoku {
         printSudoku(this.puzzleSolution);
     }
 
-    // function to print the board
-    private void printSudoku(String puzzleString) {
+    // function to convert String of numbers to 2D array of 9x9
+    private int[][] parseBoard(String puzzleString) {
         // create 2d 9x9 array
         var board = new int[9][9];
 
@@ -52,6 +52,14 @@ public class Sudoku {
                 stringIndex++;
             }
         }
+
+        // return the board
+        return board;
+    }
+
+    // function to print the board
+    private void printSudoku(String puzzleString) {
+        var board = parseBoard(puzzleString);
 
         // print in a nice way
         for (int row = 0; row < 9; row++) {

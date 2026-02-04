@@ -1,5 +1,6 @@
 package com.avocado.sudoko.engine;
 
+import com.avocado.sudoko.global.utils.BoardUtils;
 import com.avocado.sudoko.sudoku.Sudoku;
 import com.avocado.sudoko.sudoku.SudokuDifficulty;
 import lombok.AllArgsConstructor;
@@ -15,13 +16,14 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Generator {
     private final Solver solver;
+    private final BoardUtils boardUtils;
 
     // declare the grid size 9x9
     private static final int ROW_SIZE = 9;
     private static final int COLUMN_SIZE = 9;
 
     // function to get random number from 1 to 9
-    private int generateRandomNumber() {
+    private int getRandomNumber() {
         return (int) (Math.random() * 10); // 0 to 9
     }
 
@@ -44,7 +46,7 @@ public class Generator {
             for (int j = 0; j < 3; j++) {
                 do {
                     // Generate a random number between 1 and 9
-                    randomNumber = generateRandomNumber();
+                    randomNumber = getRandomNumber();
                 } while (!solver.validNumberInBox(board, row, col, randomNumber)); // generate again while its invalid number
 
                 // fill the cell
@@ -101,31 +103,10 @@ public class Generator {
         return false;
     }
 
-    // function to clone 2d Array
-    private int[][] deepCopyBoard(int[][] board) {
-        // create the board array
-        int[][] copyBoard = new int[ROW_SIZE][COLUMN_SIZE];
-
-        // iterate over the rows (0 -> 8)
-        for (int i = 0; i < ROW_SIZE; i++) {
-            // copy the cells in each row
-            System.arraycopy(
-                    board[i], // array to be copied from
-                    0, // starting position in source array from where to copy (first index)
-                    copyBoard[i], // array to be copied in
-                    0, // starting position in destination array, where to paste in (first index as well)
-                    COLUMN_SIZE // total no. of components to be copied (9 cells in each row)
-            );
-        }
-
-        // return the copied array
-        return copyBoard;
-    }
-
     // function to remove digits based on the difficulty level
     private int[][] removeDigits(int[][] board, SudokuDifficulty difficulty) {
         // create a clone of the board
-        var puzzleArray = deepCopyBoard(board);
+        var puzzleArray = boardUtils.deepCopyBoard(board);
 
         // get the digits to remove count based on the difficulty
         var digitsToRemove = difficulty.getDigitsToRemove();
@@ -153,22 +134,6 @@ public class Generator {
 
         // return the updated board
         return puzzleArray;
-    }
-
-    // function to convert a 2D array of 9x9 to String of numbers
-    private String getBoardInString(int[][] board) {
-        // string builder instance
-        StringBuilder stringBuilder = new StringBuilder();
-
-        // iterate over the board to convert the array to string
-        for (int i = 0; i < ROW_SIZE; i++) {
-            for (int j = 0; j < COLUMN_SIZE; j++) {
-                stringBuilder.append(board[i][j]);
-            }
-        }
-
-        // return the array as string
-        return stringBuilder.toString();
     }
 
     // function to generate a solved puzzle
@@ -203,13 +168,9 @@ public class Generator {
 
         // fill the sudoku fields
         sudoku.setUuid(UUID.randomUUID()); // generate a unique uuid
-        sudoku.setPuzzle(getBoardInString(puzzleBoard)); // convert the puzzle to string
-        sudoku.setPuzzleSolution(getBoardInString(solvedBoard)); // convert the puzzle solution to string
+        sudoku.setPuzzle(boardUtils.boardToString(puzzleBoard)); // convert the puzzle to string
+        sudoku.setPuzzleSolution(boardUtils.boardToString(solvedBoard)); // convert the puzzle solution to string
         sudoku.setDifficulty(difficulty); // set the difficulty
-
-
-        // todo: store the puzzle solution in a file
-        // todo: store the puzzle in a file
 
         // return the generated board
         return sudoku;
