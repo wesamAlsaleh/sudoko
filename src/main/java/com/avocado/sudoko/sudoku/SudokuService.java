@@ -42,7 +42,9 @@ public class SudokuService {
     // function to submit a puzzle solution
     public boolean submitSudoku(SudokuSolveRequest request) {
         // get the sudoku solution
-        var sudokuSolution = loadSudoko(UUID.fromString(request.getUuid())).getPuzzleSolution();
+        var sudokuSolution =
+                loadSudoko(UUID.fromString(request.getUuid()))
+                        .getPuzzleSolution();
 
         // get the player solution
         var playerSolution = request.getPlayerSolution().trim(); // trim to be safe
