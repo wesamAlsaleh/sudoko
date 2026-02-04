@@ -7,7 +7,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -15,11 +17,11 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     // method to handle Jakarta validation violations
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationViolation(
+    public ResponseEntity<ErrorDto> handleValidationViolation(
             MethodArgumentNotValidException exception
     ) {
         // initialize errors hash map
-        HashMap<String, String> errors = new HashMap<>();
+        List<String> errors = new ArrayList<>();
 
         // iterate through all fields errors and add them to the errors map
         exception
@@ -27,11 +29,13 @@ public class GlobalExceptionHandler {
                 .getFieldErrors()
                 .forEach(error -> {
                     // result format: { "board": "Must be 81 characters", "uuid": "Cannot be null" }
-                    errors.put(error.getField(), error.getDefaultMessage());
+                    errors.add(error.getDefaultMessage());
                 });
 
         // return 400 bad request with the error details
-        return ResponseEntity.badRequest().body(errors);
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorDto(errors.get(0))); // print the first error
     }
 
     // method to handle write operations
