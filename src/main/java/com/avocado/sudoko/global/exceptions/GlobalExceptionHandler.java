@@ -1,5 +1,7 @@
 package com.avocado.sudoko.global.exceptions;
 
+import com.avocado.sudoko.global.dtos.ErrorDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,4 +34,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    // method to handle file not found exception
+    @ExceptionHandler(SudokuFileNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleSudokuFileNotFound(SudokuFileNotFoundException exception) {
+        // return 404 not found with a message
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorDto(exception.getMessage()));
+    }
 }
