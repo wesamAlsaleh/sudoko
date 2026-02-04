@@ -11,7 +11,7 @@ public class SudokuSolveRequest {
     @NotBlank(message = "Game ID must not be blank")
     @Pattern(
             regexp = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}", // 8dig-4dig-4dig-4dig-12dig (0-9 and a-f A-F)
-            message = "Game ID is not valid UUID format"
+            message = "Game ID is not valid"
     )
     private String uuid; // UUID v4 format
 
