@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
@@ -18,21 +19,27 @@ public class SudokuController {
 
     // api endpoint to generate a game
     @PostMapping
-    public ResponseEntity<?> generateSudoku() {
+    public ResponseEntity<?> generateSudoku(UriComponentsBuilder uriComponentsBuilder) {
         // try to generate a game
         var sudoku = sudokuService.generateSudoku();
 
+        // build the location URI to tells the client where to find the resource
+        var uri = uriComponentsBuilder.path("/api/v1/sudoku/{id}")
+                .buildAndExpand(sudoku.getUuid())
+                .toUri();
+
         // return the generated game as sudokuDto
-        return ResponseEntity.ok(sudokuMapper.toDto(sudoku));
+        return ResponseEntity
+                .created(uri) // sets the Location header to /api/v1/sudoku/123...
+                .body(sudokuMapper.toDto(sudoku));
     }
 
-    // todo: add the uuid in the params to load a game
     // todo: handle not found exception
     // api endpoint to load a game
-    @GetMapping
-    public ResponseEntity<?> getSudoku() {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getSudoku(@PathVariable(name = "id") String uuid) {
         // try to get a generated game
-        var sudoku = sudokuService.loadSudoko(UUID.fromString("08f7418c-e25f-4c22-b254-930a0d21c3f9"));
+        var sudoku = sudokuService.loadSudoko(UUID.fromString(uuid));
 
         // return the generated game as sudokuDto
         return ResponseEntity.ok(sudokuMapper.toDto(sudoku));

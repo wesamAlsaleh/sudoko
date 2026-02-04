@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleValidationViolation(
             MethodArgumentNotValidException exception
     ) {
-        // initialize errors array
+        // initialize errors hash map
         HashMap<String, String> errors = new HashMap<>();
 
         // iterate through all fields errors and add them to the errors map
@@ -24,11 +24,11 @@ public class GlobalExceptionHandler {
                 .getBindingResult()
                 .getFieldErrors()
                 .forEach(error -> {
-                    // EX: ["email", "must be a well-formed email address"]
+                    // result format: { "board": "Must be 81 characters", "uuid": "Cannot be null" }
                     errors.put(error.getField(), error.getDefaultMessage());
                 });
 
-        // return bad request error with the errors as the body
+        // return 400 bad request with the error details
         return ResponseEntity.badRequest().body(errors);
     }
 
