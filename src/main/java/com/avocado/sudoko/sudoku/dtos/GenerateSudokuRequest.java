@@ -8,6 +8,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class GenerateSudokuRequest {
-    @NotBlank(message = "Difficulty must be provided")
-    private SudokuDifficulty difficulty;
+    @NotBlank(message = "difficulty must not be blank")
+    private String difficulty;
 }

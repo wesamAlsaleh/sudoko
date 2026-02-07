@@ -19,7 +19,7 @@ public class SudokuService {
     // function to generate a new game
     public Sudoku generateSudoku(GenerateSudokuRequest request) {
         // generate new sudoku game
-        var sudoku = generator.generateSudokuGame(request.getDifficulty());
+        var sudoku = generator.generateSudokuGame(SudokuDifficulty.valueOf(request.getDifficulty()));
 
         // save the generated game
         sudokuRepository.save(sudoku);
