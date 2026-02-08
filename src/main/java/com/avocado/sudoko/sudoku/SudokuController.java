@@ -1,5 +1,6 @@
 package com.avocado.sudoko.sudoku;
 
+import com.avocado.sudoko.sudoku.dtos.GenerateSudokuRequest;
 import com.avocado.sudoko.sudoku.dtos.SudokuSolveRequest;
 import com.avocado.sudoko.sudoku.dtos.SudokuSolveResponse;
 import jakarta.validation.Valid;
@@ -19,9 +20,12 @@ public class SudokuController {
 
     // api endpoint to generate a game
     @PostMapping
-    public ResponseEntity<?> generateSudoku(UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<?> generateSudoku(
+            @Valid @RequestBody GenerateSudokuRequest request,
+            UriComponentsBuilder uriComponentsBuilder
+    ) {
         // try to generate a game
-        var sudoku = sudokuService.generateSudoku();
+        var sudoku = sudokuService.generateSudoku(request);
 
         // build the location URI to tells the client where to find the resource
         var uri = uriComponentsBuilder.path("/api/v1/sudoku/{id}")

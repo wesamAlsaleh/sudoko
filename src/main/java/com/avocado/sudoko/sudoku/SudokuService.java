@@ -1,6 +1,7 @@
 package com.avocado.sudoko.sudoku;
 
 import com.avocado.sudoko.engine.Generator;
+import com.avocado.sudoko.sudoku.dtos.GenerateSudokuRequest;
 import com.avocado.sudoko.sudoku.dtos.SudokuDto;
 import com.avocado.sudoko.sudoku.dtos.SudokuSolveRequest;
 import lombok.AllArgsConstructor;
@@ -16,9 +17,9 @@ public class SudokuService {
     private final SudokuRepository sudokuRepository;
 
     // function to generate a new game
-    public Sudoku generateSudoku() {
+    public Sudoku generateSudoku(GenerateSudokuRequest request) {
         // generate new sudoku game
-        var sudoku = generator.generateSudokuGame(SudokuDifficulty.MEDIUM);
+        var sudoku = generator.generateSudokuGame(SudokuDifficulty.valueOf(request.getDifficulty()));
 
         // save the generated game
         sudokuRepository.save(sudoku);
